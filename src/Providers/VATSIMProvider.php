@@ -50,9 +50,7 @@ class VATSIMProvider extends AbstractProvider
   protected function getDefaultScopes()
   {
     return [
-      'full_name',
-      'vatsim_details',
-      'email'
+      'full_name vatsim_details email'
     ];
   }
 
