@@ -38,6 +38,11 @@ class VATSIM extends Provider
 
     public function provider(string $redirectUri): AbstractProvider
     {
+        $options = [
+            'clientId' => $this->getSetting('client_id'),
+            'clientSecret' => $this->getSetting('client_secret'),
+            'redirectUri' => $redirectUri,
+        ];
         $domain = $this->getSetting('domain');
 
         if ($domain) {
