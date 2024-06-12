@@ -9,55 +9,48 @@
  *  file that was distributed with this source code.
  */
 
-namespace IanM\OAuthAmazon\Providers;
+namespace VATPRC\OAuthVATSIM\Providers;
 
 use Flarum\Forum\Auth\Registration;
 use FoF\OAuth\Provider;
 use League\OAuth2\Client\Provider\AbstractProvider;
-use Luchianenco\OAuth2\Client\Provider\Amazon as AmazonProvider;
-use Luchianenco\OAuth2\Client\Provider\AmazonResourceOwner;
 
-class Amazon extends Provider
+class VATSIM extends Provider
 {
-    /**
-     * @var AmazonProvider
-     */
-    protected $provider;
+  public function name(): string
+  {
+    return 'vatsim';
+  }
 
-    public function name(): string
-    {
-        return 'amazon';
-    }
+  public function link(): string
+  {
+    return 'https://my.vatsim.net/register';
+  }
 
-    public function link(): string
-    {
-        return 'https://developer.amazon.com/docs/login-with-amazon/register-web.html';
-    }
+  public function fields(): array
+  {
+    return [
+      'client_id' => 'required',
+      'client_secret' => 'required',
+    ];
+  }
 
-    public function fields(): array
-    {
-        return [
-            'client_id'     => 'required',
-            'client_secret' => 'required',
-        ];
-    }
+  public function provider(string $redirectUri): AbstractProvider
+  {
+    return $this->provider = new VATSIMProvider([
+      'clientId' => $this->getSetting('client_id'),
+      'clientSecret' => $this->getSetting('client_secret'),
+      'redirectUri' => $redirectUri,
+    ]);
+  }
 
-    public function provider(string $redirectUri): AbstractProvider
-    {
-        return $this->provider = new AmazonProvider([
-            'clientId'     => $this->getSetting('client_id'),
-            'clientSecret' => $this->getSetting('client_secret'),
-            'redirectUri'  => $redirectUri,
-        ]);
-    }
+  public function suggestions(Registration $registration, $user, string $token)
+  {
+    /** @var VATSIMResourceOwner $user */
+    $this->verifyEmail($email = $user->getEmail());
 
-    public function suggestions(Registration $registration, $user, string $token)
-    {
-        /** @var AmazonResourceOwner $user */
-        $this->verifyEmail($email = $user->getEmail());
-
-        $registration
-            ->provideTrustedEmail($email)
-            ->setPayload($user->toArray());
-    }
+    $registration
+      ->provideTrustedEmail($email)
+      ->setPayload($user->toArray());
+  }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "xfoxfu/oauth-vatsim",
+    "name": "vatprc/oauth-vatsim",
     "description": "Log in to your Flarum forum with VATSIM Connect",
     "keywords": [
         "flarum",
@@ -22,13 +22,13 @@
     },
     "authors": [
         {
-            "name": "IanM",
-            "homepage": "https://discuss.flarum.org/u/ianm"
+            "name": "xfoxfu",
+            "homepage": "https://xfox.me"
         }
     ],
     "autoload": {
         "psr-4": {
-            "IanM\\OAuthAmazon\\": "src/"
+            "VATPRC\\OAuthVATSIM\\": "src/"
         }
     },
     "extra": {
