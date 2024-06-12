@@ -43,7 +43,7 @@ class VATSIM extends Provider
             'clientSecret' => $this->getSetting('client_secret'),
             'redirectUri' => $redirectUri,
         ];
-        $domain = $this->getSetting('domain');
+        $domain = $this->getSetting('base_domain');
 
         if ($domain) {
             $options['domain'] = $domain;
