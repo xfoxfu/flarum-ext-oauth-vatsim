@@ -11,88 +11,84 @@ use Psr\Http\Message\ResponseInterface;
 
 class VATSIMProvider extends AbstractProvider
 {
-  use BearerAuthorizationTrait;
+    use BearerAuthorizationTrait;
 
-  /**
-   * Returns the base URL for authorizing a client.
-   *
-   * @return string
-   */
-  public function getBaseAuthorizationUrl()
-  {
-    return 'https://auth-dev.vatsim.net/oauth/authorize';
-  }
+    public const DEFAULT_DOMAIN = 'https://auth.vatsim.net';
+    public string $domain = self::DEFAULT_DOMAIN;
 
-  /**
-   * Returns the base URL for requesting an access token.
-   *
-   * @param array $params
-   * @return string
-   */
-  public function getBaseAccessTokenUrl(array $params)
-  {
-    return 'https://auth-dev.vatsim.net/oauth/token';
-  }
+    private const PATH_API_USER = '/api/user';
+    private const PATH_AUTHORIZE = '/oauth/authorize';
+    private const PATH_TOKEN = '/oauth/token';
 
-  /**
-   * Returns the URL for requesting the resource owner's details.
-   *
-   * @param AccessToken $token
-   * @return string
-   */
-  public function getResourceOwnerDetailsUrl(AccessToken $token)
-  {
-    return 'https://auth-dev.vatsim.net/api/user';
-  }
-
-  /**
-   * Returns the default scopes used by this provider.
-   *
-   * @return array
-   */
-  protected function getDefaultScopes()
-  {
-    return [
-      'full_name vatsim_details email'
-    ];
-  }
-
-  /**
-   * Checks a provider response for errors.
-   *
-   * @throws IdentityProviderException
-   * @param  ResponseInterface $response
-   * @param  array|string $data Parsed response data
-   * @return void
-   */
-  protected function checkResponse(ResponseInterface $response, $data)
-  {
-    if ($response->getStatusCode() != 200) {
-      throw new VATSIMIdentityProviderException('unauthenticated', $response->getStatusCode(), $response);
+    /**
+     * Returns the base URL for authorizing a client.
+     *
+     * @return string
+     */
+    public function getBaseAuthorizationUrl()
+    {
+        return $this->domain . self::PATH_AUTHORIZE;
     }
-  }
 
-  /**
-   * Generates a resource owner object from a successful resource owner
-   * details request.
-   *
-   * @param  array $response
-   * @param  AccessToken $token
-   * @return ResourceOwnerInterface
-   */
-  protected function createResourceOwner(array $response, AccessToken $token)
-  {
-    return new VATSIMResourceOwner($response);
-  }
+    /**
+     * Returns the base URL for requesting an access token.
+     *
+     * @param array $params
+     * @return string
+     */
+    public function getBaseAccessTokenUrl(array $params)
+    {
+        return $this->domain . self::PATH_TOKEN;
+    }
 
-  /**
-   * @param  mixed|null $token Either a string or an access token instance
-   * @return array
-   */
-  protected function getAuthorizationHeaders($token = null)
-  {
-    return [
-      'Authorization' => "Bearer {$token}",
-    ];
-  }
+    /**
+     * Returns the URL for requesting the resource owner's details.
+     *
+     * @param AccessToken $token
+     * @return string
+     */
+    public function getResourceOwnerDetailsUrl(AccessToken $token)
+    {
+        return $this->domain . self::PATH_API_USER;
+    }
+
+    /**
+     * Returns the default scopes used by this provider.
+     *
+     * @return array
+     */
+    protected function getDefaultScopes()
+    {
+        return [
+            'full_name vatsim_details email'
+        ];
+    }
+
+    /**
+     * Checks a provider response for errors.
+     *
+     * @param ResponseInterface $response
+     * @param array|string $data Parsed response data
+     * @return void
+     * @throws IdentityProviderException
+     */
+    protected function checkResponse(ResponseInterface $response, $data)
+    {
+        if ($response->getStatusCode() != 200) {
+            throw new VATSIMIdentityProviderException('unauthenticated', $response->getStatusCode(), $response);
+        }
+    }
+
+    /**
+     * Generates a resource owner object from a successful resource owner
+     * details request.
+     *
+     * @param array $response
+     * @param AccessToken $token
+     * @return ResourceOwnerInterface
+     */
+    protected function createResourceOwner(array $response, AccessToken $token)
+    {
+        return new VATSIMResourceOwner($response);
+    }
 }

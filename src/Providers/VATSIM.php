@@ -17,40 +17,44 @@ use League\OAuth2\Client\Provider\AbstractProvider;
 
 class VATSIM extends Provider
 {
-  public function name(): string
-  {
-    return 'vatsim';
-  }
+    public function name(): string
+    {
+        return 'vatsim';
+    }
 
-  public function link(): string
-  {
-    return 'https://my.vatsim.net/register';
-  }
+    public function link(): string
+    {
+        return 'https://auth.vatsim.net';
+    }
 
-  public function fields(): array
-  {
-    return [
-      'client_id' => 'required',
-      'client_secret' => 'required',
-    ];
-  }
+    public function fields(): array
+    {
+        return [
+            'client_id' => 'required',
+            'client_secret' => 'required',
+            'base_domain' => '',
+        ];
+    }
 
-  public function provider(string $redirectUri): AbstractProvider
-  {
-    return $this->provider = new VATSIMProvider([
-      'clientId' => $this->getSetting('client_id'),
-      'clientSecret' => $this->getSetting('client_secret'),
-      'redirectUri' => $redirectUri,
-    ]);
-  }
+    public function provider(string $redirectUri): AbstractProvider
+    {
+        $domain = $this->getSetting('domain');
 
-  public function suggestions(Registration $registration, $user, string $token)
-  {
-    /** @var VATSIMResourceOwner $user */
-    $this->verifyEmail($email = $user->getEmail());
+        if ($domain) {
+            $options['domain'] = $domain;
+        }
 
-    $registration
-      ->provideTrustedEmail($email)
-      ->setPayload($user->toArray());
-  }
+        return $this->provider = new VATSIMProvider($options);
+    }
+
+    public function suggestions(Registration $registration, $user, string $token)
+    {
+        /** @var VATSIMResourceOwner $user */
+        $this->verifyEmail($email = $user->getEmail());
+
+        $registration
+            ->provideTrustedEmail($email)
+            ->suggestUsername($user->getId() ?: '')
+            ->setPayload($user->toArray());
+    }
 }
