@@ -6,10 +6,13 @@ use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
 
 class VATSIMProvider extends AbstractProvider
 {
+  use BearerAuthorizationTrait;
+
   /**
    * Returns the base URL for authorizing a client.
    *
@@ -80,5 +83,16 @@ class VATSIMProvider extends AbstractProvider
   protected function createResourceOwner(array $response, AccessToken $token)
   {
     return new VATSIMResourceOwner($response);
+  }
+
+  /**
+   * @param  mixed|null $token Either a string or an access token instance
+   * @return array
+   */
+  protected function getAuthorizationHeaders($token = null)
+  {
+    return [
+      'Authorization' => "Bearer {$token}",
+    ];
   }
 }
