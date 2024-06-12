@@ -9,20 +9,20 @@
  *  file that was distributed with this source code.
  */
 
-namespace IanM\OAuthAmazon;
+namespace VATPRC\OAuthVATSIM;
 
 use Flarum\Extend;
 use FoF\OAuth\Extend as OAuthExtend;
-use IanM\OAuthAmazon\Providers\Amazon;
+use VATPRC\OAuthVATSIM\Providers\VATSIM;
 
 return [
     (new Extend\Frontend('forum'))
-        ->css(__DIR__.'/less/forum.less'),
+        ->css(__DIR__ . '/less/forum.less'),
 
     (new Extend\Frontend('admin'))
-        ->js(__DIR__.'/js/dist/admin.js'),
+        ->js(__DIR__ . '/js/dist/admin.js'),
 
-    new Extend\Locales(__DIR__.'/locale'),
+    new Extend\Locales(__DIR__ . '/locale'),
 
-    (new OAuthExtend\RegisterProvider(Amazon::class)),
+    (new OAuthExtend\RegisterProvider(VATSIM::class)),
 ];

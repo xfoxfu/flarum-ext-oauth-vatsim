@@ -16,8 +16,8 @@
         "forum": "https://discuss.flarum.org/d/29191"
     },
     "require": {
-        "flarum/core": "^1.2.0",
-        "fof/oauth": "^1.3.0",
+        "flarum/core": "^v1.8.5",
+        "fof/oauth": "^1.6.9",
         "luchianenco/oauth2-amazon": "^2.0"
     },
     "authors": [
