@@ -22,6 +22,11 @@ class VATSIM extends Provider
         return 'vatsim';
     }
 
+    public function icon(): string
+    {
+        return "fab fa-fly";
+    }
+
     public function link(): string
     {
         return 'https://auth.vatsim.net';
@@ -59,7 +64,8 @@ class VATSIM extends Provider
 
         $registration
             ->provideTrustedEmail($email)
-            ->suggestUsername($user->getId() ?: '')
+            ->provide('username', $user->getId() ?: '')
+            ->provide("nickname", $user->getName() ?: $user->getEmail())
             ->setPayload($user->toArray());
     }
 }

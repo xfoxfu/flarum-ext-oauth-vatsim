@@ -7,14 +7,15 @@ fof-oauth:
 
           client_id_label: => fof-oauth.ref.settings.client_id
           client_secret_label: => fof-oauth.ref.settings.client_secret
+          base_domain_label: VATSIM Connect base domain (leave blank for production)
 
   forum:
     log_in:
-      with_vatsim_button: '=> fof-oauth.forum.log_in.with_button'
+      with_vatsim_button: 'VATSIM Connect'
 
     providers:
       vatsim: '=> fof-oauth.lib.providers.vatsim'
 
   lib:
     providers:
-      vatsim: vatsim
+      vatsim: VATSIM Connect

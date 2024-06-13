@@ -39,7 +39,10 @@
                 "name": "fab fa-fly",
                 "backgroundColor": "#0072e3",
                 "color": "#fff"
-            }
+            },
+            "optional-dependencies": [
+                "flarum/nicknames"
+            ]
         }
     }
 }
